@@ -14,16 +14,17 @@ const createCustomElement = (element, className, innerText) => {
   return e;
 };
 
-// const cartItemClickListener = (event) => {
-//   
-// };
+const cartItemClickListener = (event) => {
+  const theTarget = event.target;
+  theTarget.remove();
+};
 
 /** CRIA ELEMENTO DO CARRINHO DE COMPRAS */
 const createCartItemElement = ({ sku, name, salePrice }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  // li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', cartItemClickListener);
   return li;
 };
 
