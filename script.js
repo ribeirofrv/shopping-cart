@@ -17,6 +17,7 @@ const createCustomElement = (element, className, innerText) => {
 const cartItemClickListener = (event) => {
   const theTarget = event.target;
   theTarget.remove();
+  saveCartItems(ol);
 };
 
 /** CRIA ELEMENTO DO CARRINHO DE COMPRAS */
@@ -29,7 +30,10 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
 };
 
 /** ADICIONA LISTA DE PRODUTOS AO CARRINHO DE COMPRAS */
-const addToCart = (values) => ol.appendChild(createCartItemElement(values));
+const addToCart = (values) => {
+  ol.appendChild(createCartItemElement(values));
+  saveCartItems(ol);
+};
 
 const getDataFromProduct = async (sku) => {
   const { id, title, price } = await fetchItem(sku);
@@ -43,7 +47,6 @@ const buttonAddEvent = async (event) => {
   const node = theTarget.parentNode; // Retorna o elemento pai
   const sku = getSkuFromProductItem(node);
   const values = await getDataFromProduct(sku);
-  console.log('button');
   addToCart(values);
 };
 
@@ -72,6 +75,16 @@ const createSectionProducts = async () => {
   });
 };
 
+const clearCart = () => {
+  const buttonClear = document.querySelector('.empty-cart');
+  buttonClear.addEventListener('click', () => {
+    ol.innerHTML = '';
+    saveCartItems(ol);
+  });
+};
+
 window.onload = () => {
   createSectionProducts();
+  getSavedCartItems(ol);
+  clearCart();
  };
