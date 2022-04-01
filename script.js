@@ -83,8 +83,15 @@ const clearCart = () => {
   });
 };
 
+const getCart = () => {
+  ol.innerHTML = getSavedCartItems();
+  ol.childNodes.forEach((li) => {
+    li.addEventListener('click', cartItemClickListener);
+  });
+};
+
 window.onload = () => {
   createSectionProducts();
-  getSavedCartItems(ol);
+  getCart();
   clearCart();
  };
