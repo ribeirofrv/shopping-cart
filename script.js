@@ -17,6 +17,7 @@ const createCustomElement = (element, className, innerText) => {
 const cartItemClickListener = (event) => {
   const theTarget = event.target;
   theTarget.remove();
+  getTotalPrice();
   saveCartItems(ol);
 };
 
@@ -42,12 +43,27 @@ const getDataFromProduct = async (sku) => {
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
+/** Ref.: https://regexr.com/ */
+const getTotalPrice = () => {
+  const totalPrice = document.querySelector('.total-price');
+  let total = 0;
+  
+  ol.childNodes.forEach(async (li) => {
+    const sku = li.textContent.match(/([MLB])\w+/);
+    const { price } = await fetchItem(sku[0]);
+    total += price;
+    
+    totalPrice.innerText = total;
+  });
+};
+
 const buttonAddEvent = async (event) => {
   const theTarget = event.target;
   const node = theTarget.parentNode; // Retorna o elemento pai
   const sku = getSkuFromProductItem(node);
   const values = await getDataFromProduct(sku);
   addToCart(values);
+  getTotalPrice();
 };
 
 /** CRIA ELEMENTOS DA LISTA DE PRODUTOS À VENDA */
@@ -94,4 +110,5 @@ window.onload = () => {
   createSectionProducts();
   getCart();
   clearCart();
+  getTotalPrice();
  };
