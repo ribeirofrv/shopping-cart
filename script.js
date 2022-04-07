@@ -14,6 +14,20 @@ const createCustomElement = (element, className, innerText) => {
   return e;
 };
 
+/** Ref.: https://regexr.com/ */
+const getTotalPrice = () => {
+  const totalPrice = document.querySelector('.total-price');
+  let total = 0;
+  
+  ol.childNodes.forEach(async (li) => {
+    const sku = li.textContent.match(/([MLB])\w+/);
+    const { price } = await fetchItem(sku[0]);
+    total += price;
+    
+    totalPrice.innerText = total;
+  });
+};
+
 const cartItemClickListener = (event) => {
   const theTarget = event.target;
   theTarget.remove();
@@ -42,20 +56,6 @@ const getDataFromProduct = async (sku) => {
 };
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
-
-/** Ref.: https://regexr.com/ */
-const getTotalPrice = () => {
-  const totalPrice = document.querySelector('.total-price');
-  let total = 0;
-  
-  ol.childNodes.forEach(async (li) => {
-    const sku = li.textContent.match(/([MLB])\w+/);
-    const { price } = await fetchItem(sku[0]);
-    total += price;
-    
-    totalPrice.innerText = total;
-  });
-};
 
 const buttonAddEvent = async (event) => {
   const theTarget = event.target;
